@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wisata_app/helper/session_manager.dart';
 import 'package:wisata_app/models/tourism_place.dart';
 import 'package:wisata_app/utils/constants.dart';
 
@@ -9,8 +10,13 @@ class DetailScreen extends StatelessWidget {
 
   const DetailScreen({Key? key, required this.place}) : super(key: key);
 
+  Future<void> checkLoginStatus(BuildContext context) async {
+    await SessionManager().checkLoginStatus(context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    checkLoginStatus(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -18,7 +24,7 @@ class DetailScreen extends StatelessWidget {
           children: <Widget>[
             Stack(
               children: <Widget>[
-                Image.asset(place.imageAsset),
+                Image.network(place.image),
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -85,7 +91,7 @@ class DetailScreen extends StatelessWidget {
                       const Icon(Icons.monetization_on),
                       const SizedBox(height: 8.0),
                       Text(
-                        place.ticketPrice,
+                        place.ticketPrice.toString(),
                         style: informationTextStyle,
                       ),
                     ],
@@ -108,7 +114,7 @@ class DetailScreen extends StatelessWidget {
               height: 150,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: place.imageUrls.map((url) {
+                children: place.urlImages.map((url) {
                   return Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: ClipRRect(
